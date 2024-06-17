@@ -1,0 +1,143 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+static void Main(string[] args)
+{
+Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+int choice;
+
+do
+{
+Console.WriteLine("\nMenu:");
+Console.WriteLine("1. Populate Dictionary");
+Console.WriteLine("2. Display Dictionary Contents");
+Console.WriteLine("3. Remove a Key");
+Console.WriteLine("4. Add a New Key and Value");
+Console.WriteLine("5. Add a Value to an Existing Key");
+Console.WriteLine("6. Sort the Keys");
+Console.WriteLine("7. Exit");
+Console.Write("Enter your choice: ");
+if (!int.TryParse(Console.ReadLine(), out choice))
+{
+Console.WriteLine("Invalid input. Please enter a number between 1 and 7.");
+continue;
+}
+
+switch (choice)
+{
+case 1:
+PopulateDictionary(dict);
+break;
+case 2:
+DisplayDictionaryContents(dict);
+break;
+case 3:
+Console.Write("Enter the key to remove: ");
+string keyToRemove = Console.ReadLine();
+RemoveKey(dict, keyToRemove);
+break;
+case 4:
+Console.Write("Enter the new key: ");
+string newKey = Console.ReadLine();
+Console.Write("Enter the new value: ");
+string newValue = Console.ReadLine();
+AddNewKeyValuePair(dict, newKey, newValue);
+break;
+case 5:
+Console.Write("Enter the existing key: ");
+string existingKey = Console.ReadLine();
+Console.Write("Enter the new value to append: ");
+string appendValue = Console.ReadLine();
+AddValueToExistingKey(dict, existingKey, appendValue);
+break;
+case 6:
+SortKeys(dict);
+break;
+case 7:
+Console.WriteLine("Exiting program.");
+break;
+default:
+Console.WriteLine("Invalid choice. Please enter a number between 1 and 7.");
+break;
+}
+} while (choice != 7);
+}
+
+static void PopulateDictionary(Dictionary<string, List<string>> dict)
+{
+Console.Write("Enter the number of entries: ");
+if (int.TryParse(Console.ReadLine(), out int entries))
+{
+for (int i = 0; i < entries; i++)
+{
+Console.Write("Enter key: ");
+string key = Console.ReadLine();
+Console.Write("Enter value: ");
+string value = Console.ReadLine();
+if (!dict.ContainsKey(key))
+{
+dict[key] = new List<string>();
+}
+dict[key].Add(value);
+}
+}
+else
+{
+Console.WriteLine("Invalid number of entries.");
+}
+}
+
+static void DisplayDictionaryContents(Dictionary<string, List<string>> dict)
+{
+foreach (var kvp in dict)
+{
+Console.WriteLine($"Key: {kvp.Key}, Values: {string.Join(", ", kvp.Value)}");
+}
+}
+
+static void RemoveKey(Dictionary<string, List<string>> dict, string key)
+{
+if (dict.Remove(key))
+{
+Console.WriteLine($"Key {key} removed.");
+}
+else
+{
+Console.WriteLine($"Key {key} not found.");
+}
+}
+
+static void AddNewKeyValuePair(Dictionary<string, List<string>> dict, string key, string value)
+{
+if (!dict.ContainsKey(key))
+{
+dict[key] = new List<string>();
+}
+dict[key].Add(value);
+Console.WriteLine($"Added {value} to key {key}.");
+}
+
+static void AddValueToExistingKey(Dictionary<string, List<string>> dict, string key, string newValue)
+{
+if (dict.ContainsKey(key))
+{
+dict[key].Add(newValue);
+Console.WriteLine($"Added {newValue} to key {key}.");
+}
+else
+{
+Console.WriteLine($"Key {key} not found.");
+}
+}
+
+static void SortKeys(Dictionary<string, List<string>> dict)
+{
+var sortedDict = new SortedDictionary<string, List<string>>(dict);
+foreach (var kvp in sortedDict)
+{
+Console.WriteLine($"Key: {kvp.Key}, Values: {string.Join(", ", kvp.Value)}");
+}
+}
+}
